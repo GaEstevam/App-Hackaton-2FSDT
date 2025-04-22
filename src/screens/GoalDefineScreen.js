@@ -111,87 +111,138 @@ const GoalDefineScreen = ({ route, navigation }) => {
   }
 
   return (
-    <View style={styles.container}>
-      <Header title="Definir Meta" />
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <Text style={styles.title}>Resumo da Meta</Text>
-        <View style={styles.detailContainer}>
-          <View style={styles.labelContainer}>
-            <Icon name="label" size={20} />
-            <Text style={styles.label}>Nome:</Text>
-          </View>
-          <Text style={styles.value}>{goalData.name}</Text>
-        </View>
-        <View style={styles.detailContainer}>
-          <View style={styles.labelContainer}>
-            <Icon name="category" size={20} />
-            <Text style={styles.label}>Tipo de Meta:</Text>
-          </View>
-          <Text style={styles.value}>
-            {goalData.type_goal ? "Dividendo" : "Patrimônio"}
-          </Text>
-        </View>
-        <View style={styles.detailContainer}>
-          <View style={styles.labelContainer}>
-            <Icon name="attach-money" size={20} />
-            <Text style={styles.label}>Patrimônio Desejado:</Text>
-          </View>
-          <Text style={styles.value}>{goalData.patrimony.toFixed(2)}</Text>
-        </View>
-        <View style={styles.detailContainer}>
-          <View style={styles.labelContainer}>
-            <Icon name="trending-up" size={20} />
-            <Text style={styles.label}>Dividendos:</Text>
-          </View>
-          <Text style={styles.value}>{goalData.dividends.toFixed(2)}</Text>
-        </View>
-        <View style={styles.detailContainer}>
-          <View style={styles.labelContainer}>
-            <Icon name="account-balance" size={20} />
-            <Text style={styles.label}>Meu Patrimônio:</Text>
-          </View>
-          <Text style={styles.value}>{goalData.my_patrimony.toFixed(2)}</Text>
-        </View>
-        <View style={styles.detailContainer}>
-          <View style={styles.labelContainer}>
-            <Icon name="show-chart" size={20} />
-            <Text style={styles.label}>Taxa:</Text>
-          </View>
-          <Text style={styles.value}>{(goalData.rate * 100).toFixed(2)}%</Text>
-        </View>
-        <View style={styles.detailContainer}>
-          <View style={styles.labelContainer}>
-            <Icon name="access-time" size={20} />
-            <Text style={styles.label}>Tempo Desejado (anos):</Text>
-          </View>
-          <Text style={styles.value}>{goalData.time_desired.toFixed(2)}</Text>
-        </View>
-        <View style={styles.detailContainer}>
-          <View style={styles.labelContainer}>
-            <Icon name="event-repeat" size={20} />
-            <Text style={styles.label}>Aporte Mensal:</Text>
-          </View>
-          <Text style={styles.value}>{goalData.monthly_aport.toFixed(2)}</Text>
-        </View>
-        <View style={styles.summaryContainer}>
-          <View style={styles.labelContainer}>
-            <Icon name="description" size={20} />
-            <Text style={styles.label}>Resumo:</Text>
-          </View>
-          <Text style={styles.summary}>
-            {getLimitedSummary(goalData.summary)}
-          </Text>
-          {goalData.summary.length > 250 && (
-            <TouchableOpacity
-              onPress={() => setShowFullSummary(!showFullSummary)}
-            >
-              <Text style={styles.showMoreText}>
-                {showFullSummary ? "Mostrar menos" : "Mostrar mais"}
-              </Text>
-            </TouchableOpacity>
-          )}
-        </View>
-      </ScrollView>
+<View style={styles.container}>
+  <Header title="Definir Meta" />
+  <ScrollView contentContainerStyle={styles.scrollContainer}>
+    <Text style={styles.title}>Resumo da Meta</Text>
+
+    {/* Exibindo os detalhes da meta */}
+    <View style={styles.detailContainer}>
+      <View style={styles.labelContainer}>
+        <Icon name="label" size={20} />
+        <Text style={styles.label}>Nome:</Text>
+      </View>
+      <Text style={styles.value}>{goalData.name}</Text>
+    </View>
+
+    <View style={styles.detailContainer}>
+      <View style={styles.labelContainer}>
+        <Icon name="category" size={20} />
+        <Text style={styles.label}>Tipo de Meta:</Text>
+      </View>
+      <Text style={styles.value}>
+        {goalData.type_goal ? "Dividendo" : "Patrimônio"}
+      </Text>
+    </View>
+
+    {/* Patrimônio Desejado */}
+    <View style={styles.detailContainer}>
+      <View style={styles.labelContainer}>
+        <Icon name="attach-money" size={20} />
+        <Text style={styles.label}>Patrimônio Desejado:</Text>
+      </View>
+      <Text style={styles.value}>
+        {
+          (() => {
+            // Log para depuração
+            console.log('Valor de goalData.patrimony:', goalData.patrimony);
+
+            // Tentando forçar goalData.patrimony para número
+            const patrimony = parseFloat(goalData.patrimony);
+
+            // Verificando se o valor é um número válido
+            if (isNaN(patrimony)) {
+              return "N/A";  // Exibe "N/A" caso não seja número válido
+            }
+
+            // Retorna o valor formatado com duas casas decimais
+            return patrimony.toFixed(2);
+          })()
+        }
+      </Text>
+    </View>
+
+    {/* Dividendos */}
+    <View style={styles.detailContainer}>
+      <View style={styles.labelContainer}>
+        <Icon name="trending-up" size={20} />
+        <Text style={styles.label}>Dividendos:</Text>
+      </View>
+      <Text style={styles.value}>
+        {
+          isNaN(goalData.dividends) ? "N/A" : goalData.dividends.toFixed(2)
+        }
+      </Text>
+    </View>
+
+    {/* Meu Patrimônio */}
+    <View style={styles.detailContainer}>
+      <View style={styles.labelContainer}>
+        <Icon name="account-balance" size={20} />
+        <Text style={styles.label}>Meu Patrimônio:</Text>
+      </View>
+      <Text style={styles.value}>
+        {
+          (() => {
+            // Log para depuração
+            console.log('Valor de goalData.my_patrimony:', goalData.my_patrimony);
+
+            // Tentando forçar goalData.my_patrimony para número
+            const myPatrimony = parseFloat(goalData.my_patrimony);
+
+            // Verificando se o valor é um número válido
+            if (isNaN(myPatrimony)) {
+              return "N/A";  // Exibe "N/A" caso não seja número válido
+            }
+
+            // Retorna o valor formatado com duas casas decimais
+            return myPatrimony.toFixed(2);
+          })()
+        }
+      </Text>
+    </View>
+
+    {/* Taxa */}
+    <View style={styles.detailContainer}>
+      <View style={styles.labelContainer}>
+        <Icon name="show-chart" size={20} />
+        <Text style={styles.label}>Taxa:</Text>
+      </View>
+      <Text style={styles.value}>
+        {
+          isNaN(goalData.rate) ? "N/A" : (goalData.rate * 100).toFixed(2)
+        }%
+      </Text>
+    </View>
+
+    {/* Tempo Desejado */}
+    <View style={styles.detailContainer}>
+      <View style={styles.labelContainer}>
+        <Icon name="access-time" size={20} />
+        <Text style={styles.label}>Tempo Desejado (anos):</Text>
+      </View>
+      <Text style={styles.value}>
+        {
+          (() => {
+            // Log para depuração
+            console.log('Valor de goalData.time_desired:', goalData.time_desired);
+
+            // Tentando forçar goalData.time_desired para número
+            const timeDesired = parseFloat(goalData.time_desired);
+
+            // Verificando se o valor é um número válido
+            if (isNaN(timeDesired)) {
+              return "N/A";  // Exibe "N/A" caso não seja número válido
+            }
+
+            // Retorna o valor formatado com duas casas decimais
+            return timeDesired.toFixed(2);
+          })()
+        }
+      </Text>
+    </View>
+
+  </ScrollView>
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           style={[styles.button, styles.createButton]}

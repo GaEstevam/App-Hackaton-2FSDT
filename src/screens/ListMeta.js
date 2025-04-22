@@ -61,9 +61,9 @@ const ListMeta = ({ navigation }) => {
   const renderGoal = ({ item }) => {
     const progress = item.patrimony > 0 ? item.my_patrimony / item.patrimony : 0;
     const progressColor = getProgressColor(progress);
-
+  
     console.log(`Goal: ${item.name}, Progress: ${progress}`); // Debugging line
-
+  
     return (
       <TouchableOpacity
         onPress={() => navigation.navigate("GoalDetail", { goalId: item.id })}
@@ -84,14 +84,27 @@ const ListMeta = ({ navigation }) => {
           </View>
           <View style={styles.goalDetails}>
             <Text style={styles.label}>Aporte Mensal:</Text>
-            <Text style={styles.value}>R${item.monthly_aport.toFixed(2)}</Text>
+            <Text style={styles.value}>
+              {item.monthly_aport != null && !isNaN(item.monthly_aport)
+                ? `R$${item.monthly_aport.toFixed(2)}`
+                : "R$0.00"}
+            </Text>
           </View>
           <View style={styles.goalDetails}>
             <Text style={styles.label}>Tempo Desejado:</Text>
-            <Text style={styles.value}>{item.time_desired.toFixed(1)} anos</Text>
+            <Text style={styles.value}>
+              {item.time_desired != null && !isNaN(item.time_desired)
+                ? `${item.time_desired.toFixed(1)} anos`
+                : "0 anos"}
+            </Text>
           </View>
           <View style={styles.progressBarContainer}>
-            <View style={[styles.progressBar, { width: `${progress * 100}%`, backgroundColor: progressColor }]} />
+            <View
+              style={[
+                styles.progressBar,
+                { width: `${progress * 100}%`, backgroundColor: progressColor },
+              ]}
+            />
           </View>
         </View>
       </TouchableOpacity>

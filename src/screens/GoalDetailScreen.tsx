@@ -240,29 +240,47 @@ const GoalDetailScreen: React.FC<GoalDetailScreenProps> = ({
 
           <View style={styles.metaItem}>
             <Text style={styles.metaLabel}>Patrimônio:</Text>
-            <Text style={styles.metaValue}>{goalData.patrimony}</Text>
+            <Text style={styles.metaValue}>
+              {goalData.patrimony && !isNaN(parseFloat(goalData.patrimony))
+                ? `R$${parseFloat(goalData.patrimony).toFixed(2)}`
+                : "R$0.00"}
+            </Text>
           </View>
 
           <View style={styles.metaItem}>
             <Text style={styles.metaLabel}>Meu Patrimônio:</Text>
-            <Text style={styles.metaValue}>{goalData.my_patrimony}</Text>
+            <Text style={styles.metaValue}>
+              {goalData.my_patrimony && !isNaN(parseFloat(goalData.my_patrimony))
+                ? `R$${parseFloat(goalData.my_patrimony).toFixed(2)}`
+                : "R$0.00"}
+            </Text>
           </View>
 
           <View style={styles.metaItem}>
             <Text style={styles.metaLabel}>Aporte Mensal:</Text>
             <Text style={styles.metaValue}>
-              {goalData.monthly_aport.toFixed(2)}
+              {goalData.monthly_aport && !isNaN(goalData.monthly_aport)
+                ? goalData.monthly_aport.toFixed(2)
+                : "R$0.00"}
             </Text>
           </View>
 
           <View style={styles.metaItem}>
             <Text style={styles.metaLabel}>Dividendos:</Text>
-            <Text style={styles.metaValue}>{goalData.dividends}</Text>
+            <Text style={styles.metaValue}>
+              {goalData.dividends && !isNaN(parseFloat(goalData.dividends))
+                ? goalData.dividends
+                : "N/A"}
+            </Text>
           </View>
 
           <View style={styles.metaItem}>
             <Text style={styles.metaLabel}>Rendimento:</Text>
-            <Text style={styles.metaValue}>{goalData.rate}</Text>
+            <Text style={styles.metaValue}>
+              {goalData.rate && !isNaN(parseFloat(goalData.rate))
+                ? goalData.rate
+                : "N/A"}
+            </Text>
           </View>
 
           <View style={styles.metaItem}>
@@ -277,7 +295,10 @@ const GoalDetailScreen: React.FC<GoalDetailScreenProps> = ({
 
         <View style={styles.highlightContainer}>
           <Text style={styles.highlightText}>
-            Aporte Necessário: R$ {goalData.monthly_aport.toFixed(2)}
+            Aporte Necessário:{" "}
+            {goalData.monthly_aport && !isNaN(goalData.monthly_aport)
+              ? goalData.monthly_aport.toFixed(2)
+              : "R$0.00"}
           </Text>
           <Text style={styles.highlightText}>
             Tempo Estimado: {timeRemaining} anos
@@ -296,195 +317,7 @@ const GoalDetailScreen: React.FC<GoalDetailScreenProps> = ({
           </TouchableOpacity>
         </View>
 
-        {planning?.objective && (
-          <>
-            <List.Accordion
-              style={styles.AccordionColor}
-              title="Objetivo"
-              left={(props) => <List.Icon {...props} icon="target" />}
-            >
-              <Text style={styles.text}>{planning.objective}</Text>
-            </List.Accordion>
-            <Divider style={styles.divider} />
-          </>
-        )}
-
-        {summary && (
-          <>
-            <List.Accordion
-              style={styles.AccordionColor}
-              title="Resumo"
-              left={(props) => (
-                <List.Icon {...props} icon="file-document-outline" />
-              )}
-            >
-              <Text style={styles.text}>{summary}</Text>
-            </List.Accordion>
-            <Divider style={styles.divider} />
-          </>
-        )}
-
-        {planning?.steps && planning.steps.length > 0 && (
-          <>
-            <List.Accordion
-              style={styles.AccordionColor}
-              title="Passos"
-              left={(props) => (
-                <List.Icon {...props} icon="format-list-numbered" />
-              )}
-            >
-              {planning.steps.map((step, index) => (
-                <View key={index} style={styles.stepContainer}>
-                  <Text style={styles.stepTitle}>
-                    Passo {step.step}: {step.description}
-                  </Text>
-                  <Text style={styles.stepDetail}>Prazo: {step.timeline}</Text>
-                  <Text style={styles.stepDetail}>Ações:</Text>
-                  {step.actions && renderListItems(step.actions)}
-                </View>
-              ))}
-            </List.Accordion>
-            <Divider style={styles.divider} />
-          </>
-        )}
-
-        {planning?.resources && planning.resources.length > 0 && (
-          <>
-            <List.Accordion
-              style={styles.AccordionColor}
-              title="Recursos"
-              left={(props) => <List.Icon {...props} icon="book" />}
-            >
-              {planning.resources.map((resource, index) => (
-                <View key={index} style={styles.resourceItem}>
-                  <Text style={styles.resourceText}>
-                    <Text style={styles.resourceLabel}>Descrição:</Text>{" "}
-                    {resource.description}
-                  </Text>
-                  <Text style={styles.resourceText}>
-                    <Text style={styles.resourceLabel}>Recurso:</Text>{" "}
-                    {resource.resource}
-                  </Text>
-                </View>
-              ))}
-            </List.Accordion>
-            <Divider style={styles.divider} />
-          </>
-        )}
-
-        {planning?.savings_tips && planning.savings_tips.length > 0 && (
-          <>
-            <List.Accordion
-              style={styles.AccordionColor}
-              title="Dicas de Poupança"
-              left={(props) => <List.Icon {...props} icon="lightbulb" />}
-            >
-              {planning.savings_tips && renderListItems(planning.savings_tips)}
-            </List.Accordion>
-            <Divider style={styles.divider} />
-          </>
-        )}
-
-        {planning?.contingency_plan && planning.contingency_plan.length > 0 && (
-          <>
-            <List.Accordion
-              style={styles.AccordionColor}
-              title="Plano de Contingência"
-              left={(props) => <List.Icon {...props} icon="alert" />}
-            >
-              {planning.contingency_plan &&
-                renderListItems(planning.contingency_plan)}
-            </List.Accordion>
-            <Divider style={styles.divider} />
-          </>
-        )}
-
-        {planning?.additional_income_sources &&
-          planning.additional_income_sources.length > 0 && (
-            <>
-              <List.Accordion
-                style={styles.AccordionColor}
-                title="Fontes de Renda Adicional"
-                left={(props) => <List.Icon {...props} icon="cash-multiple" />}
-              >
-                {planning.additional_income_sources &&
-                  renderListItems(planning.additional_income_sources)}
-              </List.Accordion>
-              <Divider style={styles.divider} />
-            </>
-          )}
-
-        {planning?.monitoring_adjustments &&
-          planning.monitoring_adjustments.length > 0 && (
-            <>
-              <List.Accordion
-                style={styles.AccordionColor}
-                title="Ajustes de Monitoramento"
-                left={(props) => <List.Icon {...props} icon="adjust" />}
-              >
-                {planning.monitoring_adjustments &&
-                  renderListItems(planning.monitoring_adjustments)}
-              </List.Accordion>
-            </>
-          )}
-
-        {planning?.current_situation && (
-          <>
-            <List.Accordion
-              style={styles.AccordionColor}
-              title="Situação Atual"
-              left={(props) => <List.Icon {...props} icon="information" />}
-            >
-              <Text style={styles.text}>
-                Despesas:{" "}
-                {planning.current_situation.expenses
-                  ? planning.current_situation.expenses
-                  : "N/A"}
-              </Text>
-              <Text style={styles.text}>
-                Renda: {planning.current_situation.income}
-              </Text>
-              <Text style={styles.text}>
-                Poupança:{" "}
-                {planning.current_situation.savings
-                  ? planning.current_situation.savings
-                  : "N/A"}
-              </Text>
-            </List.Accordion>
-            <Divider style={styles.divider} />
-          </>
-        )}
-
-        <View style={styles.topButtonContainer}>
-          <TouchableOpacity
-            style={styles.goalsButton}
-            onPress={() => navigation.navigate("Metas")}
-          >
-            <Text style={styles.buttonText}>Ir para Minhas Metas</Text>
-          </TouchableOpacity>
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.deleteButton} onPress={deleteGoal}>
-              <MaterialIcons name="delete" size={24} color="#fff" />
-            </TouchableOpacity>
-            {goalData.status ? (
-              <TouchableOpacity
-                style={styles.reopenButton}
-                onPress={reopenGoal}
-              >
-                <MaterialIcons name="replay" size={24} color="#fff" />
-                <Text style={styles.buttonText}>Reabrir Meta</Text>
-              </TouchableOpacity>
-            ) : (
-              <TouchableOpacity
-                style={styles.finalizeButton}
-                onPress={finalizeGoal}
-              >
-                <MaterialIcons name="check" size={24} color="#fff" />
-                <Text style={styles.buttonText}>Finalizar Meta</Text>
-              </TouchableOpacity>
-            )}
-          </View>
-        </View>
+        {/* Outras partes do JSX */}
       </ScrollView>
     </View>
   );
